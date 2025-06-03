@@ -1,0 +1,1 @@
+//Room is essentially just a struct, see room.hpp to see implementation.

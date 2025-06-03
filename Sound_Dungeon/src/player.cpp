@@ -4,6 +4,7 @@
 Player::Player(sf::Vector3f startPosition, std::unique_ptr<sf::Sprite>& spritePtr, Dungeon* dungeon)
     : position(startPosition), listenerPosition(startPosition), currentDirection(Direction::North), sprite(spritePtr), dungeonPtr(dungeon)  // Assign raw pointer
 {
+    //Ensure files are loaded correctly
     if (!footstepBuffer.loadFromFile("../Sound_Dungeon/audio/footstep_1.wav")) {
         std::cerr << "Error: Failed to load footstep sound!" << std::endl;
         return;
@@ -35,6 +36,7 @@ void Player::setPosition(const sf::Vector3f& newPosition) {
     sprite->setPosition(sf::Vector2f(position.x, position.y));
 }
 
+//Turns the player clockwise. I used a Direction Enum purely for readability.
 void Player::rotate(bool clockwise) {
     if (clockwise) {
         switch (currentDirection) {
@@ -56,6 +58,7 @@ void Player::rotate(bool clockwise) {
     std::cerr << "Player is now facing: " << static_cast<int>(currentDirection) << std::endl;
 }
 
+//Checks if the next pixel on the texture is red (wall)
 bool Player::isPixelRed(const sf::Image& image, sf::Vector2i pixelPos) {
     if (pixelPos.x < 0 || pixelPos.y < 0 || pixelPos.x >= image.getSize().x || pixelPos.y >= image.getSize().y)
         return true;
@@ -63,6 +66,7 @@ bool Player::isPixelRed(const sf::Image& image, sf::Vector2i pixelPos) {
     return (pixelColor.r > 200 && pixelColor.g < 100 && pixelColor.b < 100);
 }
 
+//Checks if the next pixel on the texture is brown (door)
 bool Player::isPixelBrown(const sf::Image& image, sf::Vector2i pixelPos) {
     if (pixelPos.x < 0 || pixelPos.y < 0 || pixelPos.x >= image.getSize().x || pixelPos.y >= image.getSize().y)
         return false;
@@ -78,6 +82,7 @@ sf::Vector2i Player::getImageCoords(sf::Vector2f screenPos, sf::Vector2f dungeon
     );
 }
 
+//Attempts to knock through a range of space, if it hits red or brown it plays the appropriate knock, otherwise it clicks.
 void Player::knock(bool isLeft, const sf::Image& dungeonImage, sf::Vector2f dungeonScale) {
     const float KNOCK_DELAY = 0.9f + static_cast<float>(rand() % 50) / 100.0f;
     const float MIN_KNOCK_RANGE = 1.0f;
@@ -162,6 +167,7 @@ void Player::knock(bool isLeft, const sf::Image& dungeonImage, sf::Vector2f dung
     knockCooldown.restart();
 }
 
+//Walk forward, knocks on walls, increases score and plays player reactions to beneficial and hazardous rooms.
 void Player::stepForwardAndInteract(float SCALE_FACTOR, const sf::Image& dungeonImage, sf::Vector2f dungeonScale) {
     const float MOVE_RATE = static_cast<float>(SCALE_FACTOR) * 0.05;
     const float FOOTSTEP_DELAY = 0.9f + static_cast<float>(rand() % 50) / 100.0f;

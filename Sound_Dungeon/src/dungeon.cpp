@@ -15,6 +15,7 @@ const std::vector<std::unique_ptr<Room>>& Dungeon::getRooms()
     return validRooms; 
 }
 
+//Returns first grid position of start room
 sf::Vector3f Dungeon::getStartPosition(sf::Vector2f scaleFactor) const {
     if (!startRoom || startRoom->gridPosition.empty()) {
         std::cerr << "Error: No valid start room!" << std::endl;
@@ -27,6 +28,7 @@ sf::Vector3f Dungeon::getStartPosition(sf::Vector2f scaleFactor) const {
     return sf::Vector3f(static_cast<float>(startPixel.x) * scaleFactor.x, static_cast<float>(startPixel.y) * scaleFactor.y, 0.0f);
 }
 
+//Creates the dungeon
 void Dungeon::generateDungeon(sf::Image& image) {
     popRoomList(image);
     cullDisconnectedRooms(image);
@@ -110,6 +112,7 @@ void Dungeon::generateDungeon(sf::Image& image) {
     std::cout << "Dungeon generation complete with " << validRooms.size() << " rooms!\n";
 }
 
+//Determines a large enough cluster for a dungeon and removes all rooms not attached to that cluster
 std::unordered_set<Room*> Dungeon::cullDisconnectedRooms(sf::Image& image) {
     const int REQUIRED_ROOMS = 25;
     bool bEnoughRooms = false;
@@ -177,6 +180,7 @@ std::unordered_set<Room*> Dungeon::cullDisconnectedRooms(sf::Image& image) {
     }
 }
 
+//Uses floodFill to allocate each room on the texture to its own room object
 void Dungeon::popRoomList(sf::Image& image) {
     validRooms.clear();
     sf::Color white(255, 255, 255);
@@ -249,6 +253,7 @@ void Dungeon::floodFill(sf::Image& image, int x, int y, sf::Color targetColor, R
     }
 }
 
+// Removes the border of the texture so no rooms can touch it
 void Dungeon::removeEdgeWalls(sf::Image& image) {
     sf::Color black(0, 0, 0);
     sf::Vector2u imageSize = image.getSize();
@@ -264,6 +269,7 @@ void Dungeon::removeEdgeWalls(sf::Image& image) {
     }
 } 
 
+//Fixes any broken walls
 void Dungeon::restoreValidRoomWalls(sf::Image& image, Room* room) {
     sf::Color red(255, 0, 0);
 
@@ -288,8 +294,9 @@ void Dungeon::restoreValidRoomWalls(sf::Image& image, Room* room) {
         if (pixel.x < image.getSize().x - 1 && pixel.y < image.getSize().y - 1 && image.getPixel(sf::Vector2u(pixel.x + 1, pixel.y + 1)) == sf::Color(0, 0, 0))
             image.setPixel(sf::Vector2u(pixel.x + 1, pixel.y + 1), red);
     }
-}   //CHECKED
+} 
 
+//Used to remove a room from the texture
 void Dungeon::removeInvalidRoomPixels(sf::Image& image, Room* room) {
     sf::Color black(0, 0, 0);
 
@@ -310,6 +317,7 @@ void Dungeon::removeInvalidRoomPixels(sf::Image& image, Room* room) {
     }
 }
 
+//Used for developer visualisation
 void Dungeon::colourRooms(sf::Image& image) {
     sf::Color green(0, 255, 0);      // Start Room
     sf::Color dark_green(0, 100, 0); // End Room
@@ -347,6 +355,7 @@ void Dungeon::colourRooms(sf::Image& image) {
     }
 }
 
+//Changes doorless rooms to caves that wander until they join back to the dungeon
 void Dungeon::convertToCaveAndDrunkardsWalk(sf::Image& image, Room* room) {
     sf::Color red(255, 0, 0);   // Walls  
     sf::Color black(0, 0, 0);   // Empty space  
@@ -429,6 +438,7 @@ void Dungeon::convertToCaveAndDrunkardsWalk(sf::Image& image, Room* room) {
     }
 }
 
+// Drunkard's walk on doorless but connected rooms
 void Dungeon::deadEndsToCaves(sf::Image& image) {
     std::vector<Room*> toConvert;
 

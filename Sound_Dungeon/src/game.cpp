@@ -62,6 +62,7 @@ void Game::run(bool debug) {
     }
 }
 
+//Starts up audio, or if playing for a second time, makes a new dungeon
 void Game::beginLevel(bool newLevel)
 {
     if (newLevel)

@@ -9,6 +9,8 @@ int main()
 
 	Game game(window);	
 
+	// Change to true to toggle Developer Mode. Alternatively, in the help menu, press the Enter key, 
+	// then the P key. That will enable developer mode.
 	game.run(false);
 
 	return 0;

@@ -2,6 +2,7 @@
 #include <algorithm>
 #include <iostream>
 
+//Used to determine which room is closest to each corner for pathfinding between extremes
 sf::Vector2i Pathfinding::findClosestRoom(const sf::Vector2i& target, const std::vector<std::unique_ptr<Room>>& validRooms) {
     sf::Vector2i closestCenter;
     int closestDistance = std::numeric_limits<int>::max();

@@ -45,6 +45,7 @@ Menu::Menu(sf::Font& font, sf::RenderWindow& window, Game* gamePtr)
     fileNames = { "menu_play.wav", "menu_help.wav", "menu_ExitToDesktop.wav" };
 }
 
+//Switches depending on current menu
 void Menu::handleInput(sf::Event::KeyReleased keyReleased)
 {
     if ((keyReleased.scancode == sf::Keyboard::Scan::J) || (keyReleased.scancode == sf::Keyboard::Scan::F) || (keyReleased.scancode == sf::Keyboard::Scan::Space))
@@ -86,6 +87,7 @@ void Menu::render(sf::RenderWindow& window)
     }
 }
 
+//Option to listen to tutorial
 void Menu::help(sf::Event::KeyReleased keyReleased)
 {
     if (currentMenu != menuType::helpMenu)
@@ -164,6 +166,7 @@ void Menu::help(sf::Event::KeyReleased keyReleased)
     }
 }
 
+//Main Menu that lets you begin, get help, or quit
 void Menu::startMenu(sf::Event::KeyReleased keyReleased)
 {
     if (currentMenu != menuType::mainMenu)
@@ -222,6 +225,7 @@ void Menu::startMenu(sf::Event::KeyReleased keyReleased)
     }
 }
 
+//Menu that plays when you win the game
 void Menu::end(sf::Event::KeyReleased keyReleased, int finalScore)
 {
     if (currentMenu != menuType::endMenu)
@@ -303,6 +307,7 @@ void Menu::end(sf::Event::KeyReleased keyReleased, int finalScore)
     }
 }
 
+//Menu triggered by pressing escape while playing
 void Menu::pause(sf::Event::KeyReleased keyReleased)
 {
     if (currentMenu != menuType::pauseMenu)
@@ -372,6 +377,7 @@ void Menu::setMenu(menuType newMenu)
     currentMenu = newMenu;
 }
 
+//Plays a button sound
 void Menu::clickNoise(sf::Event::KeyReleased keyReleased)
 {
     if (clickSound->getStatus() != sf::SoundSource::Status::Playing)
@@ -389,6 +395,7 @@ void Menu::clickNoise(sf::Event::KeyReleased keyReleased)
     }
 }
 
+//Turns music on or off
 void Menu::toggleMusic(bool play)
 {
     if (play && musicSound->getStatus() != sf::SoundSource::Status::Playing)
@@ -411,6 +418,7 @@ void Menu::toggleMusic(bool play)
 
 }
 
+//Read aloud the name of the option
 void Menu::playDescription(std::string fileName)
 {
         sf::Listener::setPosition(sf::Vector3f(0.0f, 0.0f, 0.0f));
@@ -422,6 +430,7 @@ void Menu::playDescription(std::string fileName)
         descSound->play();
 }
 
+//Plays the welcome message
 void Menu::playGameStart(sf::Vector3f listnerPos) {
     fileNames = {"menu_welcome.wav", "EndRoom_1.wav" ,"menu_reviewControls.wav"};
     descSound->setPosition(listnerPos);
