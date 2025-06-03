@@ -500,17 +500,17 @@ void Dungeon::classifyRooms() {
     startRoom->type = RoomType::Start;
     endRoom->type = RoomType::End;
 
-    // **Shuffle rooms to randomize selection**
+    // Shuffle rooms to randomize selection
     std::shuffle(validRooms.begin(), validRooms.end(), std::mt19937(std::random_device{}()));
 
-    // **Determine proportions of room types**
-    size_t neutralCount = validRooms.size() * 0.5;
-    size_t hazardousCount = validRooms.size() * 0.25;
-    size_t beneficialCount = validRooms.size() * 0.25;
+    // Determine proportions of room types
+    size_t neutralCount = validRooms.size() * 0.6;
+    size_t hazardousCount = validRooms.size() * 0.1;
+    size_t beneficialCount = validRooms.size() * 0.3;
 
     size_t index = 0;
 
-    // **Assign room types**
+    // Assign room types
     for (auto& room : validRooms) {
         if (room.get() == startRoom || room.get() == endRoom) continue;
 
@@ -527,25 +527,84 @@ void Dungeon::classifyRooms() {
     }
 }
 
+// Places audio in each room
 void Dungeon::popRoomAudio(sf::Vector2f dungeonScale) {
     std::map<RoomType, std::vector<RoomSubType>> roomSubTypes = {
     {RoomType::Beneficial, {RoomSubType::b_Treasure, RoomSubType::b_Rest, RoomSubType::b_Garden}},
-    {RoomType::Hazardous, {RoomSubType::h_ScytheTrap, RoomSubType::h_FlamingRoom}},
+    {RoomType::Hazardous, {RoomSubType::h_GasRoom, RoomSubType::h_FlamingRoom}},
     {RoomType::Cave, {RoomSubType::c_EchoCave}},
     {RoomType::Start, {RoomSubType::v_startRoom}},
     {RoomType::End, {RoomSubType::v_endRoom}}
     };
+
     audioRooms.clear();
     for (auto& room : validRooms) {
         if (room->type == RoomType::Start || room->type == RoomType::End || room->type != RoomType::Neutral) {
             audioRooms.push_back(room.get());
         }
     }
+
     std::cout << "There are: " <<audioRooms.size() << " audio rooms. " << std::endl;
+
+    float volume;
+    float attenuation;
+
+
     for (Room* room : audioRooms) {
+        // If it isn't neutral
         if (roomSubTypes.find(room->type) != roomSubTypes.end()) {  
+
             const auto& subTypes = roomSubTypes[room->type];
+
+            // Assign it random subtype
             room->subType = subTypes[rand() % subTypes.size()];
+            switch (room->subType)
+            {
+            case RoomSubType::b_Garden:
+                room->soundRatio = 6;
+                volume = 30;
+                attenuation = 4;
+                break;
+
+            case RoomSubType::b_Rest:
+                room->soundRatio = 40;
+                volume = 100;
+                attenuation = 10;
+                break;
+            case RoomSubType::b_Treasure:
+                room->soundRatio = 10;
+                volume = 100;
+                attenuation = 8;
+                break;
+            case RoomSubType::h_FlamingRoom:
+                room->soundRatio = 7;
+                volume = 100;
+                attenuation = 17;
+                break;
+            case RoomSubType::h_GasRoom:
+                room->soundRatio = 6;
+                volume = 150;
+                attenuation = 2;
+                break;
+            case RoomSubType::c_EchoCave:
+                room->soundRatio = 10;
+                volume = 50;
+                attenuation = 25;
+                break;
+            case RoomSubType::v_endRoom:
+                room->soundRatio = 100;
+                volume = 100;
+                attenuation = 3;
+                break;
+            case RoomSubType::v_startRoom:
+                room->soundRatio = 100;
+                volume = 100;
+                attenuation = 4;
+                break;
+            default:
+                break;
+            }
+
         }
         int numSounds = std::max(1, static_cast<int>(room->gridPosition.size() / room->soundRatio));
         std::cout << "Room at [" << room->gridPosition[0].x << ", " << room->gridPosition[0].y << "] gets "
@@ -572,8 +631,8 @@ void Dungeon::popRoomAudio(sf::Vector2f dungeonScale) {
                 );
                 sound->setPosition(scaledPosition);
                 sound->setLooping(true);
-                sound->setVolume(50);
-                sound->setAttenuation(25);
+                sound->setVolume(volume);
+                sound->setAttenuation(attenuation);
                 sound->setMinDistance(10);
                 room->activeSounds.push_back(std::move(sound));             
             }
@@ -581,10 +640,11 @@ void Dungeon::popRoomAudio(sf::Vector2f dungeonScale) {
                 std::cerr << "Failed to load sound: " << selectedSound << std::endl;
             }
         }
-        std::cout << "Active sounds count in room: " << room->activeSounds.size() << std::endl;
+        std::cerr << "Active sounds count in room: " << room->activeSounds.size() << std::endl;
     }
 }
 
+// Begins all audio in all rooms
 void Dungeon::startUpAudio() {
     for (Room* room : audioRooms)
     {
@@ -595,6 +655,7 @@ void Dungeon::startUpAudio() {
     }
 }
 
+// Used when CullDisconnected fails
 void Dungeon::regenerateDungeon(sf::Image& image)
 {
     validRooms.clear();

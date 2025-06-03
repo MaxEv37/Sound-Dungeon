@@ -18,7 +18,6 @@ enum RoomSubType {
     b_Treasure,     // Beneficial - coins & gems
     b_Rest,         // Beneficial - crackling campfire
     b_Garden,       // Beneficial - nature ambiance
-    h_ScytheTrap,   // Hazardous - swinging blades
     h_FlamingRoom,  // Hazardous - sections are on fire
     h_GasRoom,      // Hazardous - poison gas fills the air
     c_EchoCave,     // Cave - eerie echoing sounds

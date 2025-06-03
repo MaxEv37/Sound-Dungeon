@@ -21,6 +21,7 @@ Player::Player(sf::Vector3f startPosition, std::unique_ptr<sf::Sprite>& spritePt
     knockSound = std::make_unique<sf::Sound>(knockBuffer);
     knockSound2 = std::make_unique<sf::Sound>(knockBuffer);
     doorSound = std::make_unique<sf::Sound>(doorBuffer);
+    voiceSound = std::make_unique<sf::Sound>(voiceBuffer);
 
 }
 const sf::Vector3f& Player::getPosition() const { return position; }
@@ -164,6 +165,7 @@ void Player::knock(bool isLeft, const sf::Image& dungeonImage, sf::Vector2f dung
 void Player::stepForwardAndInteract(float SCALE_FACTOR, const sf::Image& dungeonImage, sf::Vector2f dungeonScale) {
     const float MOVE_RATE = static_cast<float>(SCALE_FACTOR) * 0.05;
     const float FOOTSTEP_DELAY = 0.9f + static_cast<float>(rand() % 50) / 100.0f;
+    const float damage_DELAY = 5.0f + static_cast<float>(rand() % 50) / 100.0f;
     sf::Vector2f nextPosition = sf::Vector2f(position.x, position.y);
     sf::Vector2f directionVector = DIRECTION_MAP_SPRITE.at(currentDirection);
     nextPosition.x += static_cast<float>(directionVector.x * MOVE_RATE);
@@ -216,22 +218,85 @@ void Player::stepForwardAndInteract(float SCALE_FACTOR, const sf::Image& dungeon
             float offsetX = (static_cast<float>(rand() % 200) / 100.0f) - 1.0f;
             float offsetZ = (static_cast<float>(rand() % 200) / 100.0f) - 1.0f;
             footstepSound->setPosition(sf::Vector3f(listenerPosition.x + offsetX, -5.0f, listenerPosition.y + offsetZ));
-            footstepSound->setAttenuation(2);
+            footstepSound->setAttenuation(1);
             footstepSound->play();
             footstepCooldown.restart();
         }
         if (dungeonPtr->getGridToRoom()->find(imageCoords) != dungeonPtr->getGridToRoom()->end()) 
         {
             Room* currentRoom = dungeonPtr->getGridToRoom()->at(imageCoords);  
+            std::string selectedSound;
 
             if (!currentRoom->isExplored) {
                 currentRoom->isExplored = true;
                 gameScore += 10;
                 std::cout << "Entered a new room! Score: " << gameScore << std::endl;
+                if (currentRoom->type == RoomType::Beneficial)
+                {
+                    gameScore += 25;
+                    selectedSound = reliefNoises[rand() % reliefNoises.size()];
+                    if (!voiceBuffer.loadFromFile(selectedSound))
+                    {
+                        std::cerr << "Error: Failed to load " << selectedSound << std::endl;
+                        return;
+                    }
+                    voiceSound->setAttenuation(0);
+                    voiceSound->setBuffer(voiceBuffer);
+                    voiceSound->setPitch(0.8f + static_cast<float>(rand() % 20) / 100.0f);
+                    voiceSound->setVolume(150);
+                    voiceSound->setPosition(sf::Vector3f(listenerPosition.x, 0.0f, listenerPosition.y));
+                    voiceSound->play();
+                    std::cout << "Sound is playing!" << std::endl;
+                }
             }
+
             if (currentRoom->type == RoomType::End)
             {
                 isEndRoom = true;
+            }
+
+            if (currentRoom->type == RoomType::Hazardous && damageCooldown.getElapsedTime().asSeconds() >= damage_DELAY)
+            {
+                damageCooldown.restart();
+                gameScore -= 10;
+                
+
+                switch (currentRoom->subType)
+                {
+                case RoomSubType::h_FlamingRoom:
+                    selectedSound = firePainNoises[rand() % firePainNoises.size()];
+                    if (!voiceBuffer.loadFromFile(selectedSound))
+                    {
+                        std::cerr << "Error: Failed to load " << selectedSound << std::endl;
+                        return;
+                    }
+                    voiceSound->setAttenuation(0);
+                    voiceSound->setBuffer(voiceBuffer);
+                    voiceSound->setPitch(0.8f + static_cast<float>(rand() % 20) / 100.0f);
+                    voiceSound->setVolume(150);
+                    voiceSound->setPosition(sf::Vector3f(listenerPosition.x, 0.0f, listenerPosition.y));
+                    voiceSound->play();
+                    std::cout << "Sound is playing!" << std::endl;
+                    break;
+
+                case RoomSubType::h_GasRoom:
+                    selectedSound = poisonPainNoises[rand() % poisonPainNoises.size()];
+                    if (!voiceBuffer.loadFromFile(selectedSound))
+                    {
+                        std::cerr << "Error: Failed to load " << selectedSound << std::endl;
+                        return;
+                    }
+                    voiceSound->setAttenuation(0);
+                    voiceSound->setBuffer(voiceBuffer);
+                    voiceSound->setPitch(0.8f + static_cast<float>(rand() % 20) / 100.0f);
+                    voiceSound->setVolume(150);
+                    voiceSound->setPosition(sf::Vector3f(listenerPosition.x, 0.0f, listenerPosition.y));
+                    voiceSound->play();
+                    std::cout << "Sound is playing!" << std::endl;
+                    break;
+                default:
+                    break;
+                }
             }
         }
     }

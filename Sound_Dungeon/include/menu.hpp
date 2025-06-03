@@ -73,5 +73,5 @@ private:
 
     std::string menuMusic = "../Sound_Dungeon/audio/menu_music.wav";
 
-
+    bool checkDev = false;
 };

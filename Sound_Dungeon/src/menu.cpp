@@ -68,6 +68,15 @@ void Menu::handleInput(sf::Event::KeyReleased keyReleased)
             break;
         };
     }
+
+    // Used to toggle developer mode
+    if (keyReleased.scancode == sf::Keyboard::Scan::Enter || keyReleased.scancode == sf::Keyboard::Scan::P)
+    {
+        if (currentMenu == menuType::helpMenu)
+        {
+            help(keyReleased);
+        }
+    }
 }
 
 void Menu::render(sf::RenderWindow& window)
@@ -115,6 +124,16 @@ void Menu::help(sf::Event::KeyReleased keyReleased)
             selectedIndex = (selectedIndex - 1 + menuOptions.size()) % menuOptions.size();
             menuOptions[selectedIndex].setFillColor(sf::Color::Red);
             playDescription(fileNames[selectedIndex]);
+        }
+
+        if (keyReleased.scancode == sf::Keyboard::Scan::Enter)
+        {
+            checkDev = !checkDev;
+        }
+
+        if (keyReleased.scancode == sf::Keyboard::Scan::P)
+        {
+            gamePtr->devMode = checkDev;
         }
 
         if (keyReleased.scancode == sf::Keyboard::Scan::Space) {

@@ -9,7 +9,7 @@ int main()
 
 	Game game(window);	
 
-	game.run();
+	game.run(false);
 
 	return 0;
 }

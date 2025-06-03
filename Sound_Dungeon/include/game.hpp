@@ -21,11 +21,12 @@ enum class GameState {
 class Game {
 public:
     Game(sf::RenderWindow& window);
-    void run();
+    void run(bool debug);
     void beginLevel(bool newLevel);
 
     sf::Vector2f dungeonScale;
     GameState currentState = GameState::MainMenu;  // Start with Main Menu
+    bool devMode;
 
 private:
     void processInput();

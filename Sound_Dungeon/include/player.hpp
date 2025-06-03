@@ -40,6 +40,7 @@ private:
     std::unique_ptr<sf::Sound> knockSound;
     std::unique_ptr<sf::Sound> knockSound2;
     std::unique_ptr<sf::Sound> doorSound;
+    std::unique_ptr<sf::Sound> voiceSound;
 
     std::vector<std::string> footstepSounds = {
         "../Sound_Dungeon/audio/footstep_1.wav", "../Sound_Dungeon/audio/footstep_2.wav",
@@ -72,6 +73,23 @@ private:
         "../Sound_Dungeon/audio/door_slam_1.wav", "../Sound_Dungeon/audio/door_slam_2.wav"
     };
 
+    std::vector<std::string> firePainNoises = {
+        "../Sound_Dungeon/audio/Fire_Noises_1.wav", "../Sound_Dungeon/audio/Fire_Noises_2.wav",
+        "../Sound_Dungeon/audio/Fire_Noises_3.wav", "../Sound_Dungeon/audio/Fire_Noises_4.wav",
+        "../Sound_Dungeon/audio/Fire_Noises_5.wav"
+    };
+
+    std::vector<std::string> poisonPainNoises = {
+        "../Sound_Dungeon/audio/Poison_Sounds_1.wav", "../Sound_Dungeon/audio/Poison_Sounds_2.wav",
+        "../Sound_Dungeon/audio/Poison_Sounds_3.wav", "../Sound_Dungeon/audio/Poison_Sounds_4.wav",
+        "../Sound_Dungeon/audio/Poison_Sounds_5.wav"
+    };
+
+    std::vector<std::string> reliefNoises = {
+        "../Sound_Dungeon/audio/Relief_1.wav", "../Sound_Dungeon/audio/Relief_2.wav",
+        "../Sound_Dungeon/audio/Relief_3.wav"
+    };
+
     const std::map<Direction, sf::Vector2f> DIRECTION_MAP_SPRITE = {
         {Direction::North, {0.0f, -1.0f}}, {Direction::South, {0.0f, 1.0f}},
         {Direction::East, {1.0f, 0.0f}}, {Direction::West, {-1.0f, 0.0f}}
@@ -89,6 +107,7 @@ private:
     sf::SoundBuffer footstepBuffer;
     sf::SoundBuffer knockBuffer;
     sf::SoundBuffer doorBuffer;
+    sf::SoundBuffer voiceBuffer;
 
     int gameScore = 0;
     Direction currentDirection = Direction::North;
@@ -98,6 +117,7 @@ private:
 
     sf::Clock footstepCooldown;
     sf::Clock knockCooldown;
+    sf::Clock damageCooldown;
 };
 
 #endif

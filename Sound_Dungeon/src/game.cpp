@@ -52,8 +52,9 @@ Game::Game(sf::RenderWindow& windowRef) : window(windowRef) {
     menu->playDescription("menu_controls.wav");
 }
 
-void Game::run() {
+void Game::run(bool debug) {
     isRunning = true;
+    bool devMode = debug;
     while (isRunning) {
         processInput();
         update(clock.restart().asSeconds());
@@ -139,7 +140,7 @@ void Game::render() {
         menu->render(window);
     }
 
-    else { 
+    else if (!devMode){ 
         // Game is running normally
         window.draw(*dungeonSprite);
         window.draw(player->getSprite());
