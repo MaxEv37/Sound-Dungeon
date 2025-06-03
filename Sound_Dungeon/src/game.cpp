@@ -14,7 +14,7 @@ Game::Game(sf::RenderWindow& windowRef) : window(windowRef) {
         std::cerr << "Error: Could not load menu font!" << std::endl;
     }
     menu = std::make_unique<Menu>(*menuFont, window, this);
-    if (!playerTexture.loadFromFile("../Sound_Dungeon/build/results/playerSprite.png")) {
+    if (!playerTexture.loadFromFile("../Sound_Dungeon/assets/playerSprite.png")) {
         std::cout << "Error: Failed to load player texture!" << std::endl;
         return;
     }
