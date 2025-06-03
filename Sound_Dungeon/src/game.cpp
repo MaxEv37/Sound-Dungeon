@@ -140,7 +140,7 @@ void Game::render() {
         menu->render(window);
     }
 
-    else if (!devMode){ 
+    else if (devMode){ 
         // Game is running normally
         window.draw(*dungeonSprite);
         window.draw(player->getSprite());
