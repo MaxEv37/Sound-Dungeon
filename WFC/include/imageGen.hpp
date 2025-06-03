@@ -114,6 +114,7 @@ void genImage(string image_path, string imageName) {
                 cout << "DONE" << endl;
                 write_image_png("../Sound_Dungeon/build/results/" + imageName + to_string(i) + ".png",
                     wfc.get_output());
+                cout << "written to: " << "../Sound_Dungeon/build/results/" + imageName + to_string(i) + ".png" << endl;
                 break;
             }
             else {

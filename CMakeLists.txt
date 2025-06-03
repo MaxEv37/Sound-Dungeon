@@ -21,11 +21,13 @@ else()
 endif()
 
 # Set Output Directory (Everything goes into "Sound Dungeon")
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/Sound_Dungeon/bin)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 
 # Create Directories for Sound Dungeon
 file(MAKE_DIRECTORY ${CMAKE_SOURCE_DIR}/Sound_Dungeon/include)
 file(MAKE_DIRECTORY ${CMAKE_SOURCE_DIR}/Sound_Dungeon/src)
+file(MAKE_DIRECTORY ${CMAKE_SOURCE_DIR}/Sound_Dungeon/build)
+file(MAKE_DIRECTORY ${CMAKE_SOURCE_DIR}/Sound_Dungeon/build/results)
 
 # Create Directories for WFC
 file(MAKE_DIRECTORY ${CMAKE_SOURCE_DIR}/WFC/include)
@@ -49,6 +51,7 @@ add_executable(sound_dungeon
     ${CMAKE_SOURCE_DIR}/Sound_Dungeon/src/player.cpp
     ${CMAKE_SOURCE_DIR}/Sound_Dungeon/src/game.cpp
     ${CMAKE_SOURCE_DIR}/Sound_Dungeon/src/pathfinding.cpp
+    ${CMAKE_SOURCE_DIR}/Sound_Dungeon/src/menu.cpp
 )
 
 # WFC Project (Static Library)
@@ -65,6 +68,7 @@ target_include_directories(sound_dungeon PUBLIC
 	${CMAKE_SOURCE_DIR}/Sound_Dungeon/include/pathfinding.hpp
 	${CMAKE_SOURCE_DIR}/Sound_Dungeon/include/player.hpp
 	${CMAKE_SOURCE_DIR}/Sound_Dungeon/include/room.hpp
+	${CMAKE_SOURCE_DIR}/Sound_Dungeon/include/menu.hpp
 )
 
 # Link Libraries
