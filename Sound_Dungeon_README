@@ -10,3 +10,15 @@ cd build
 cmake ..
 
 This will build all project files for Visual Studio 2022.
+
+
+##   ONCE THE GAME IS RUNNING   ##
+
+Instructions will play when you first load the program for how to navigate the menu, and further the tutorial to play can be found in the help menu and then by selecting tutorial.
+
+In this build, you can still see the dungeon by a secret dev mode, simply navigate to the help menu and press the following keys:
+
+>Enter
+>P
+
+Exit the help menu and play to view the dungeon. Otherwise, the game functions as usual.
