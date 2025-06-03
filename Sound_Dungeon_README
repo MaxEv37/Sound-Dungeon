@@ -3,3 +3,10 @@ Sound Dungeon is a game designed for use by the visually impaired. It is a dunge
 To begin the program, clone the repo and simply open the sound_dungeon.exe found in the Release folder. Instructions are read aloud on how to navigate the menu, to summarise:
 
 F and J cycle through menu options, Space confirms the option you are on. To hear the game controls, go to the help menu and select tutorial.
+
+Sound Dungeon was made with CMake support, if you want to look through the code files simply navigate to the first folder, and use the following commands:
+mkdir build
+cd build
+cmake ..
+
+This will build all project files for Visual Studio 2022.
