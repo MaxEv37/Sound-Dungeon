@@ -21,7 +21,7 @@ else()
 endif()
 
 # Set Output Directory (Everything goes into "Sound Dungeon")
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/..)
 
 # Create Directories for Sound Dungeon
 file(MAKE_DIRECTORY ${CMAKE_SOURCE_DIR}/Sound_Dungeon/include)
